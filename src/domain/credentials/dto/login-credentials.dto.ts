@@ -7,7 +7,7 @@ export class LoginCredentialsDto {
   @ApiProperty()
   login: string;
 
-  @Length(10, 50)
+  @Length(6, 50)
   @IsString()
   @ApiProperty()
   password: string;

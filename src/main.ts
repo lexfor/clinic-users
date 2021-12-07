@@ -3,12 +3,9 @@ import { AppModule } from './app.module';
 import { MicroserviceOptions } from '@nestjs/microservices';
 import { grpcClientOptions } from './grpc-client.options';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { CustomLogger } from './infrastructure/logger/CustomLogger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: new CustomLogger('Application'),
-  });
+  const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
     .setTitle('Users microservice')
     .setDescription('Users microservice API')
