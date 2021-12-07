@@ -14,6 +14,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/swagger', app, document);
   app.connectMicroservice<MicroserviceOptions>(grpcClientOptions);
+  app.connectMicroservice<MicroserviceOptions>(grpcClientOptions);
   await app.startAllMicroservices();
   await app.listen(3000);
 }
