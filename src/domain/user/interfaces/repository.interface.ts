@@ -1,6 +1,6 @@
-import { UserEntity } from '../entities/user.entity';
+import { UserEntity } from '../entity/user.entity';
 
-export interface IUserRepository {
-  createUser: (user: UserEntity) => Promise<UserEntity>;
-  getUser: (login: string, role: string) => Promise<UserEntity>;
+export interface ICredentialsRepository {
+  createCredentials: (user: UserEntity) => Promise<UserEntity>;
+  getCredentials: (login: string) => Promise<UserEntity>;
 }

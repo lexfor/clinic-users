@@ -20,7 +20,7 @@ export class DatabaseHealthIndicator extends HealthIndicator {
     if (isHealthy) {
       return result;
     }
-    await sendMessage('database from user microservice not available');
+    await sendMessage('database from credentials microservice not available');
     throw new HealthCheckError('database failed', result);
   }
 }

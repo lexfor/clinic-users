@@ -2,12 +2,12 @@ import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { GetPatientByID } from './domain/patient/actions/getPatientByID';
 import { GetDoctorByUserID } from './domain/doctor/actions/getDoctorByUserID';
-import { CreateUser } from './domain/user/actions/createUser';
-import { GetUser } from './domain/user/actions/getUser';
-import { CreateUserDto } from './domain/user/dto/create-user.dto';
-import { IGetUserMessage } from './domain/user/interfaces/get-user-message.interface';
-import { IUser } from './domain/user/interfaces/user.interface';
-import { UserMapper } from './domain/user/mapper/user.mapper';
+import { CreateCredentials } from './domain/credentials/actions/createCredentials';
+import { GetCredentials } from './domain/credentials/actions/getCredentials';
+import { CreateCredentialsDto } from './domain/credentials/dto/create-credentials.dto';
+import { IGetUserMessage } from './domain/credentials/interfaces/get-credentials-message.interface';
+import { IUser } from './domain/credentials/interfaces/credentials.interface';
+import { CredentialsMapper } from './domain/credentials/mapper/credentials.mapper';
 import { PatientMapper } from './domain/patient/mapper/patient.mapper';
 import { DoctorMapper } from './domain/doctor/mapper/doctor.mapper';
 import { CreatePatient } from './domain/patient/actions/createPatient';
@@ -18,24 +18,24 @@ import { ICreatePatientMessage } from './domain/patient/interfaces/create-patien
 import { CreatePatientDto } from './domain/patient/dto/create-patient.dto';
 import { IPatientMessage } from './domain/patient/interfaces/patient-message.interface';
 import { IDoctorMessage } from './domain/doctor/interfaces/doctor-message.interface';
-import { IUserIDMessage } from './domain/user/interfaces/userID-message.interface';
+import { IUserIDMessage } from './domain/credentials/interfaces/userID-message.interface';
 
 @Controller()
 export class GrpcController {
   constructor(
-    private readonly usersMapper: UserMapper,
+    private readonly usersMapper: CredentialsMapper,
     private readonly patientMapper: PatientMapper,
     private readonly doctorMapper: DoctorMapper,
     private readonly createPatientClass: CreatePatient,
     private readonly findPatientByUserIDClass: FindPatientByUserID,
     private readonly getPatientByIDClass: GetPatientByID,
-    private readonly createUserClass: CreateUser,
-    private readonly getUserClass: GetUser,
+    private readonly createUserClass: CreateCredentials,
+    private readonly getUserClass: GetCredentials,
     private readonly getDoctorByUserIDClass: GetDoctorByUserID,
   ) {}
 
   @GrpcMethod('UsersService', 'CreateUser')
-  async createUser(data: CreateUserDto): Promise<IUser> {
+  async createUser(data: CreateCredentialsDto): Promise<IUser> {
     return this.usersMapper.toRow(await this.createUserClass.createUser(data));
   }
 

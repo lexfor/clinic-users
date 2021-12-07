@@ -1,16 +1,16 @@
-import { UserEntity } from '../entity/user.entity';
+import { CredentialsVO } from '../value objects/credentials.vo';
 import { CredentialsRepository } from '../credentials.repository';
 import { LoginCredentialsDto } from '../dto/login-credentials.dto';
 import { HttpException, HttpStatus, Inject } from '@nestjs/common';
 
-export class GetUser {
+export class GetCredentials {
   constructor(
     @Inject('DATABASE_REPOSITORY')
     private readonly repository: CredentialsRepository,
   ) {}
 
-  async getUser(loginUserDto: LoginCredentialsDto): Promise<UserEntity> {
-    const userEntity: UserEntity = await this.repository.getCredentials(
+  async getUser(loginUserDto: LoginCredentialsDto): Promise<CredentialsVO> {
+    const userEntity: CredentialsVO = await this.repository.getCredentials(
       loginUserDto.login,
     );
     if (userEntity.getID !== null) {

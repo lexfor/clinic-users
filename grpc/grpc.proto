@@ -3,7 +3,7 @@ syntax = "proto3";
 package lab;
 
 service UsersService {
-  rpc CreateUser(createUserRequest) returns (createUserResponse) {}
+  rpc CreateUsers(createUserRequest) returns (createUserResponse) {}
   rpc GetUser(getUserRequest) returns (getUserResponse) {}
 }
 

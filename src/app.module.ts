@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UserModule } from './domain/user/user.module';
+import { CredentialsModule } from './domain/credentials/credentials.module';
 import { PatientModule } from './domain/patient/patient.module';
 import { DoctorModule } from './domain/doctor/doctor.module';
 import { GrpcController } from './grpc.controller';
@@ -12,7 +12,7 @@ import { poolFactory } from './infrastructure/configs/database.config';
 
 @Module({
   imports: [
-    UserModule,
+    CredentialsModule,
     PatientModule,
     DoctorModule,
     TerminusModule,
