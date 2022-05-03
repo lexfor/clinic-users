@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { Injectable } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { CreateFullUserDto } from '../dto/create-fullUser.dto';
+import { DEFAULT_PHOTO_PATH } from '../../../config/global.env';
 
 @Injectable()
 export class UserEntity {
@@ -14,39 +14,32 @@ export class UserEntity {
   @ApiProperty()
   private readonly gender: string;
   @ApiProperty()
+  private readonly address: string;
+  @ApiProperty()
   private readonly birthday: string;
   @ApiProperty()
   private readonly photo: string;
   @ApiProperty()
-  private readonly role: string;
+  private readonly credentialID: string;
 
   constructor(
     firstName: string,
     lastName: string,
     gender: string,
+    address: string,
     birthday: string,
-    photo: string,
-    role: string,
+    credentialID: string,
     id: string = uuidv4(),
+    photo: string = DEFAULT_PHOTO_PATH,
   ) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.gender = gender;
+    this.address = address;
     this.birthday = birthday;
-    this.photo = photo;
-    this.role = role;
+    this.credentialID = credentialID;
     this.id = id;
-  }
-
-  static async create(userDto: CreateFullUserDto): Promise<UserEntity> {
-    return new UserEntity(
-      userDto.firstName,
-      userDto.lastName,
-      userDto.gender,
-      userDto.birthday,
-      userDto.photo,
-      userDto.role,
-    );
+    this.photo = photo;
   }
 
   get getID(): string {
@@ -65,21 +58,25 @@ export class UserEntity {
     return this.gender;
   }
 
-  get getBirthday(): string {
-    return this.birthday;
+  get getAddress(): string {
+    return this.address;
   }
 
   get getPhoto(): string {
     return this.photo;
   }
 
-  get getRole(): string {
-    return this.role;
+  get getBirthday(): string {
+    return this.birthday;
   }
 
   get getAge(): number {
     return (
       +new Date().toISOString().substring(0, 4) - +this.birthday.substring(0, 4)
     );
+  }
+
+  get getCredentialID(): string {
+    return this.credentialID;
   }
 }

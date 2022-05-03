@@ -1,28 +1,50 @@
 import { Module } from '@nestjs/common';
-import { CredentialsModule } from './domain/credentials/credentials.module';
-import { GrpcController } from './grpc.controller';
-import { TerminusModule } from '@nestjs/terminus';
-import { HealthController } from './infrastructure/healthcheck/health.controller';
-import { DatabaseHealthIndicator } from './infrastructure/healthcheck/database.health';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { poolFactory } from './infrastructure/configs/database.config';
 import { UserModule } from './domain/user/user.module';
+import { KafkaController } from './kafka.controller';
+import { CqrsModule } from '@nestjs/cqrs';
+import { CreateUserPatientSaga } from './sagas/create/user/patient';
+import { SpecializationModule } from './domain/specialization/specialization.module';
+import { CreateUserDoctorSaga } from './sagas/create/user/doctor';
+import { CreateDoctorSaga } from './sagas/create/doctor';
+import { DeleteUserDoctorSaga } from './sagas/delete/user/doctor';
+import { UpdateUserDoctorSaga } from './sagas/update/user/doctor';
+import { DoctorModule } from './domain/doctor/doctor.module';
+import { JwtStrategy } from './auth/strategies/jwt.strategy';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { getJwtConfig } from './config/jwt.config';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+
+const sagas = [
+  CreateUserPatientSaga,
+  CreateUserDoctorSaga,
+  CreateDoctorSaga,
+  DeleteUserDoctorSaga,
+  UpdateUserDoctorSaga,
+]
 
 @Module({
   imports: [
-    CredentialsModule,
     UserModule,
-    TerminusModule,
+    DoctorModule,
+    SpecializationModule,
+    CqrsModule,
+    ConfigModule,
     ConfigModule.forRoot(),
-  ],
-  controllers: [GrpcController, HealthController],
-  providers: [
-    {
-      provide: 'DATABASE_POOL',
+    CqrsModule,
+    PassportModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule.forRoot()],
       inject: [ConfigService],
-      useFactory: poolFactory,
-    },
-    DatabaseHealthIndicator,
+      useFactory: getJwtConfig,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'public', 'photo'),
+    }),
   ],
+  providers: [...sagas, JwtStrategy],
+  controllers: [KafkaController],
 })
 export class AppModule {}
